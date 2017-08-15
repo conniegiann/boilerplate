@@ -3,20 +3,14 @@ const { DefinePlugin, optimize: { ModuleConcatenationPlugin } } = require('webpa
 const BabiliPlugin = require('babili-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const ROOT = path.join(__dirname, '../');
-const ENTRY_FILE = path.join(ROOT, './src/es', 'index.js');
-const CSS_DIR = path.join(ROOT, './src/css');
-const OUTPUT_DEST = path.join(ROOT, './dist');
+const ROOT = path.join(__dirname, './');
+const ENTRY_FILE = path.join(ROOT, './src/js', 'index.js');
+const CSS_DIR = path.join(ROOT, './src/scss');
+const OUTPUT_DEST = path.join(ROOT, './build');
 
 module.exports = function (options = {}) {
   const {
-    // SEE: `https://github.com/ai/browserslist`
-    browsers = '> 1%, last 2 versions, Firefox ESR',
-    entry = ENTRY_FILE,
-    output = {
-      filename: 'index.js',
-      path: OUTPUT_DEST,
-    },
+    // NOTE: By default we're in development mode.
     env = process.env.NODE_ENV || 'development',
   } = options;
 
@@ -45,13 +39,16 @@ module.exports = function (options = {}) {
   }
 
   return {
-    entry,
+    entry: ENTRY_FILE,
     // TODO: Allow for output to be passed as a single string.
-    output,
+    output: {
+      filename: 'index.js',
+      path: OUTPUT_DEST,
+    },
     module: {
       rules: [
         {
-          // Style pipeline... node-sass and postcss configuration.
+          // Style pipeline... node-sass config.
           test: /\.(css|scss)$/,
           use: ExtractTextPlugin.extract({
             fallback: 'style-loader',
@@ -64,7 +61,8 @@ module.exports = function (options = {}) {
                 },
               },
               {
-                loader: "sass-loader" // compiles Sass to CSS
+                // TODO: This probably needs sourcemap support.
+                loader: "sass-loader" // Compiles scss to css.
               },
             ],
           }),
@@ -76,12 +74,18 @@ module.exports = function (options = {}) {
           use: {
             loader: 'babel-loader',
             options: {
+              /**
+               * TODO: We don't need to replicate this here since there's
+               * already a `.babelrc` file in the repo. Just import and use
+               * that.
+               */
               presets: [
                 [
                   'env', {
                     targets: {
-                      browsers,
+                      browsers: '> 1%, last 2 versions, Firefox ESR',
                     },
+                    modules: false,
                   },
                 ],
               ],

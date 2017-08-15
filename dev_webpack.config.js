@@ -41,4 +41,4 @@ const devServer = {
   },
 };
 
-module.exports = Object.assign({}, require('./create_webpack_config.js')(), { devServer });
+module.exports = Object.assign({}, require('./create_webpack.config.js')(), { devServer });
