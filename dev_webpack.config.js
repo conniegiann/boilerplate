@@ -1,6 +1,6 @@
 const path = require('path');
 
-const CONTENT_BASE = path.join(__dirname, '../', './src');
+const CONTENT_BASE = path.join(__dirname, './src');
 
 // NOTE: The webpack dev server specific options.
 const devServer = {
