@@ -1,4 +1,6 @@
 const path = require('path');
+const { readFileSync } = require('fs');
+
 const { DefinePlugin, optimize: { ModuleConcatenationPlugin } } = require('webpack');
 const BabiliPlugin = require('babili-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -8,11 +10,30 @@ const ENTRY_FILE = path.join(ROOT, './src/js', 'index.js');
 const CSS_DIR = path.join(ROOT, './src/scss');
 const OUTPUT_DEST = path.join(ROOT, './build');
 
+const BABEL_CONFIG = JSON.parse(readFileSync('./.babelrc', 'utf-8'));
+console.log(BABEL_CONFIG);
+
 module.exports = function (options = {}) {
   const {
     // NOTE: By default we're in development mode.
     env = process.env.NODE_ENV || 'development',
+    // TODO: This seems like really intense support, make the default higher.
+    browsers = ['last 2 versions', 'safari >= 7', 'IE >= 8']
   } = options;
+
+  /**
+   * NOTE: We import the `.babelrc` so that we can share it's
+   * config with any test setup that we're also using babel
+   * for, but in this case we only want to target browsers
+   * and turn module transpilation off so that it will allow
+   * webpack to deal with import statements.
+   */
+  BABEL_CONFIG.presets[0][1] = {
+    modules: false,
+    targets: {
+      browsers,
+    }
+  };
 
   // Comments in css source, or minification of css.
   let minimize = false;
@@ -75,24 +96,7 @@ module.exports = function (options = {}) {
           exclude: /(node_modules)/,
           use: {
             loader: 'babel-loader',
-            options: {
-              /**
-               * TODO: We don't need to replicate this here since there's
-               * already a `.babelrc` file in the repo. Just import and use
-               * that.
-               */
-              presets: [
-                [
-                  'env', {
-                    targets: {
-                      browsers: '> 1%, last 2 versions, Firefox ESR',
-                    },
-                    modules: false,
-                  },
-                ],
-              ],
-              plugins: ['transform-react-jsx'],
-            },
+            options: BABEL_CONFIG,
           },
         },
       ],
