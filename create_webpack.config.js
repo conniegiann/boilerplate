@@ -61,8 +61,10 @@ module.exports = function (options = {}) {
                 },
               },
               {
-                // TODO: This probably needs sourcemap support.
-                loader: "sass-loader" // Compiles scss to css.
+                loader: "sass-loader",
+                options: {
+                  sourceMap: true,
+                }
               },
             ],
           }),
