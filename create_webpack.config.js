@@ -7,18 +7,16 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const ROOT = path.join(__dirname, './');
 const ENTRY_FILE = path.join(ROOT, './src/js', 'index.js');
-const CSS_DIR = path.join(ROOT, './src/scss');
 const OUTPUT_DEST = path.join(ROOT, './build');
 
 const BABEL_CONFIG = JSON.parse(readFileSync('./.babelrc', 'utf-8'));
-console.log(BABEL_CONFIG);
 
 module.exports = function (options = {}) {
   const {
     // NOTE: By default we're in development mode.
     env = process.env.NODE_ENV || 'development',
     // TODO: This seems like really intense support, make the default higher.
-    browsers = ['last 2 versions', 'safari >= 7', 'IE >= 8']
+    browsers = ['last 2 versions', 'safari >= 7', 'IE >= 8'],
   } = options;
 
   /**
@@ -32,7 +30,7 @@ module.exports = function (options = {}) {
     modules: false,
     targets: {
       browsers,
-    }
+    },
   };
 
   // Comments in css source, or minification of css.
@@ -82,10 +80,10 @@ module.exports = function (options = {}) {
                 },
               },
               {
-                loader: "sass-loader",
+                loader: 'sass-loader',
                 options: {
                   sourceMap: true,
-                }
+                },
               },
             ],
           }),
