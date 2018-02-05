@@ -28,4 +28,4 @@
 
 ## License
 
-&bull; **MIT** &copy; conniegiann, 2107 &bull;
+&bull; **MIT** &copy; [axdg](axdg@dfant.asia), 2018 &bull;
