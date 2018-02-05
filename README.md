@@ -4,7 +4,9 @@
 
 ## About
 
-**WIP:** This is a boilerplate for a modern web application...
+This is a boilerplate for a modern web application...
+
+It was actually a fork, and I'm not maintaining it anymore, my own version, which I am mantaining can be found [here](https://github.com/axdg/web-app).
 
 ## Structure
 
